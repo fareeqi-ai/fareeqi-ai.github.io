@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>إعلان المنتج</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;700;900&family=Aref+Ruqaa:wght@700&family=El+Messiri:wght@600&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;height:100%;background:#111;color:#fff;font-family:Alexandria,sans-serif}
+.wrap{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:12px;box-sizing:border-box}
+canvas{height:calc(100vh - 110px);max-width:calc(100vw - 24px);aspect-ratio:9/16;object-fit:contain;border-radius:14px;background:#000}
+.bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+button{font:inherit;font-weight:700;border:0;border-radius:12px;padding:10px 18px;cursor:pointer;background:#fff;color:#111}
+button.main{background:#FFD43B}
+#msg{font-size:14px;opacity:.75;min-height:20px}
+</style></head><body>
+<div class="wrap">
+  <canvas id="c" width="1080" height="1920"></canvas>
+  <div class="bar"><button id="replay">إعادة</button><button id="rec" class="main">نزّل الفيديو</button></div>
+  <div id="msg"></div>
+</div>
+<script>
+// =====================================================================
+// الإعدادات: غيّر الكلام والألوان هني بس
+// =====================================================================
+const CONFIG = {
+  product: 'ليل',                // اسم المنتج (يطلع على الملصق وبالخلفية)
+  line: 'عطر يدوم معاك',         // جملة الإعلان
+  cta: 'اطلبه الحين',            // زر الطلب
+  badge: 'جديد',                 // الختم (كلمة وحدة)
+  bg: ['#FF2E63', '#5A0024'],    // الخلفية: فوق ثم تحت
+  accent: '#FFE14D',             // لون الختم والزر
+  dark: '#5A0024',               // لون الكلام على الأصفر
+  glass: ['#FFB86B', '#F2542D', '#8C1238'],   // لون القارورة
+  seconds: 3,
+  fileName: 'product-ad',
+  fonts: ['900 100px "Alexandria"', '700 92px "Aref Ruqaa"'],
+};
+
+// =====================================================================
+// أدوات عامة (لا تغيرها)
+// =====================================================================
+const W = 1080, H = 1920, cv = document.getElementById('c'), c = cv.getContext('2d');
+const clamp = x => Math.max(0, Math.min(1, x));
+const seg = (t, a, b) => clamp((t - a) / (b - a));                       // 0 → 1 between seconds a and b
+const ease = {
+  out: u => 1 - Math.pow(1 - clamp(u), 3),
+  inOut: u => { u = clamp(u); return u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2; },
+  back: (u, s = 1.7) => { u = clamp(u) - 1; return 1 + (s + 1) * u * u * u + s * u * u; },
+};
+function rand(seed) { let a = seed >>> 0; return () => (a = (a * 1664525 + 1013904223) >>> 0) / 4294967296; }
+function write(s, x, y, { size = 100, font = 'Alexandria', weight = 900, color = '#fff', alpha = 1 } = {}) {
+  if (alpha <= 0) return; c.save(); c.globalAlpha *= alpha; c.font = `${weight} ${size}px "${font}"`;
+  c.direction = 'rtl'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = color; c.fillText(s, x, y); c.restore();
+}
+function star(x, y, r, color, rot = 0, points = 4) {
+  c.save(); c.translate(x, y); c.rotate(rot); c.beginPath();
+  for (let i = 0; i < points * 2; i++) { const a = i * Math.PI / points - Math.PI / 2, rr = i % 2 ? r * 0.26 : r; c.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); }
+  c.closePath(); c.fillStyle = color; c.fill(); c.restore();
+}
+const noise = document.createElement('canvas'); noise.width = noise.height = 256;
+{ const g = noise.getContext('2d'), img = g.createImageData(256, 256), r = rand(7);
+  for (let i = 0; i < img.data.length; i += 4) { const v = r() * 255; img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 22; } g.putImageData(img, 0, 0); }
+function filmLook(t, dark = 0.5) {                                        // grain + vignette, same on every scene
+  c.save(); c.globalCompositeOperation = 'overlay'; const o = (Math.floor(t * 24) * 37) % 256;
+  c.fillStyle = c.createPattern(noise, 'repeat'); c.translate(-o, -o); c.fillRect(0, 0, W + 256, H + 256); c.restore();
+  const v = c.createRadialGradient(W / 2, H / 2, H * 0.3, W / 2, H / 2, H * 0.75);
+  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, `rgba(0,0,0,${dark})`); c.fillStyle = v; c.fillRect(0, 0, W, H);
+}
+function flash(t, at, strength = 0.4, color = '255,255,255') {
+  const a = Math.max(0, 1 - Math.abs(t - at) / 0.1) * strength; if (a) { c.fillStyle = `rgba(${color},${a})`; c.fillRect(0, 0, W, H); }
+}
+
+// =====================================================================
+// المشهد: كل إطار يعتمد على الوقت t بالثواني بس
+// =====================================================================
+// The product is drawn with shapes. To show another product, replace drawProduct() and keep the rest.
+function drawProduct(t) {
+  const { glass, product, dark } = CONFIG;
+  c.save(); c.globalAlpha = 0.35; c.fillStyle = '#000'; c.filter = 'blur(12px)'; c.beginPath(); c.ellipse(0, 330, 190, 36, 0, 0, 6.29); c.fill(); c.restore();
+  c.scale(1 - 0.05 * Math.sin(t * 2.2), 1);                                                  // gentle turn
+  const cap = c.createLinearGradient(-80, 0, 80, 0); cap.addColorStop(0, '#6E4B12'); cap.addColorStop(0.35, '#FFE7A0'); cap.addColorStop(0.6, '#D9A43A'); cap.addColorStop(1, '#5C3D0C');
+  c.fillStyle = cap; c.beginPath(); c.roundRect(-46, -250, 92, 60, 10); c.fill(); c.beginPath(); c.roundRect(-86, -380, 172, 140, 26); c.fill();
+  const gl = c.createLinearGradient(-170, -200, 170, 320); gl.addColorStop(0, glass[0]); gl.addColorStop(0.5, glass[1]); gl.addColorStop(1, glass[2]);
+  c.beginPath(); c.roundRect(-170, -200, 340, 520, 70); c.fillStyle = gl; c.fill(); c.lineWidth = 6; c.strokeStyle = 'rgba(255,255,255,.55)'; c.stroke();
+  c.beginPath(); c.roundRect(-130, -150, 34, 420, 17); c.fillStyle = 'rgba(255,255,255,.35)'; c.fill();
+  c.beginPath(); c.roundRect(-110, 10, 220, 150, 18); c.fillStyle = 'rgba(255,248,240,.92)'; c.fill();
+  write(product, 8, 72, { size: 92, font: 'Aref Ruqaa', weight: 700, color: dark });
+}
+function draw(t) {
+  const { product, line, cta, badge, bg, accent, dark } = CONFIG, imp = 0.32;
+  const g0 = c.createLinearGradient(0, 0, 0, H); g0.addColorStop(0, bg[0]); g0.addColorStop(1, bg[1]); c.fillStyle = g0; c.fillRect(0, 0, W, H);
+  c.save(); c.font = '900 330px "Alexandria"'; c.direction = 'rtl'; c.textBaseline = 'middle'; c.lineWidth = 4;   // 1. moving outlined type
+  for (let row = 0; row < 6; row++) { const dir = row % 2 ? 1 : -1, x = ((t * 420 * dir) % 1100) - 550 + (row % 2) * 300;
+    c.strokeStyle = `rgba(255,255,255,${row === 2 || row === 3 ? 0.18 : 0.08})`; for (let k = -1; k < 3; k++) c.strokeText(product + ' ' + product, x + k * 1100, 160 + row * 330); }
+  c.restore();
+  const sh = t > imp ? Math.max(0, 1 - (t - imp) / 0.35) : 0;                                // 2. camera punch on landing
+  c.save(); const pz = 1 + 0.08 * sh; c.translate(W / 2 + Math.sin(t * 90) * 18 * sh, H / 2 + Math.cos(t * 77) * 14 * sh); c.scale(pz, pz); c.translate(-W / 2, -H / 2);
+  const pr = seg(t, imp, imp + 0.7); if (pr > 0 && pr < 1) { c.save(); c.strokeStyle = accent; c.globalAlpha = 1 - pr;
+    for (let k = 0; k < 2; k++) { const s = ease.out(pr) * (1 - k * 0.3); c.lineWidth = 14 * (1 - pr); c.beginPath(); c.ellipse(W / 2, H * 0.5 + 420, 200 + 600 * s, 50 + 140 * s, 0, 0, 6.29); c.stroke(); } c.restore(); }
+  const y = t < imp ? -700 + (H * 0.5 + 700) * ease.inOut(t / imp) * (t / imp) : H * 0.5 - 40 * Math.sin(Math.min(1, (t - imp) / 0.3) * Math.PI) * Math.exp(-(t - imp) * 4);
+  const sq = t > imp ? 1 + 0.08 * Math.exp(-(t - imp) * 12) : 1;                              // 3. the product drops and squashes
+  if (t < imp) { c.save(); c.globalAlpha = 0.5; c.fillStyle = '#fff'; for (let i = 0; i < 6; i++) c.fillRect(W / 2 - 160 + i * 64, y - 900, 6, 600); c.restore(); }
+  c.save(); c.translate(W / 2, y); c.scale(1.32 * sq, 1.32 / sq); drawProduct(t); c.restore();
+  const fl = seg(t, 1.2, 1.7); if (fl > 0 && fl < 1) { c.save(); c.globalCompositeOperation = 'lighter'; const x = W / 2 - 300 + 600 * fl;   // 4. glint
+    const g = c.createRadialGradient(x, H * 0.47, 0, x, H * 0.47, 160); g.addColorStop(0, 'rgba(255,255,255,.9)'); g.addColorStop(1, 'rgba(255,255,255,0)'); c.fillStyle = g; c.fillRect(0, 0, W, H);
+    star(x, H * 0.47, 70 * Math.sin(fl * Math.PI), '#fff', fl); c.restore(); }
+  const ks = t < 0.75 ? 0 : 1.8 - 0.8 * ease.back(seg(t, 0.75, 0.97), 2);                    // 5. badge slams in
+  if (ks) { c.save(); c.translate(W * 0.76, H * 0.25); c.rotate(-0.22); c.scale(ks, ks); c.rotate(t * 0.6);
+    c.beginPath(); for (let i = 0; i < 28; i++) { const a = i * Math.PI / 14, r = i % 2 ? 130 : 150; c.lineTo(Math.cos(a) * r, Math.sin(a) * r); } c.closePath(); c.fillStyle = accent; c.fill();
+    c.rotate(-t * 0.6); write(badge, 0, 4, { size: 80, color: dark }); c.restore(); }
+  c.restore();
+  const p1 = ease.out(seg(t, 1.45, 1.85));                                                    // 6. line rises, then the button pops
+  if (p1 > 0) { c.save(); c.beginPath(); c.rect(0, H * 0.79 - 80, W, 160); c.clip(); write(line, W / 2, H * 0.79 + 140 * (1 - p1), { size: 104 }); c.restore(); }
+  const p2 = ease.back(seg(t, 2.05, 2.35), 2.2);
+  if (p2 > 0) { c.save(); c.translate(W / 2, H * 0.88); c.scale(p2, p2); c.beginPath(); c.roundRect(-230, -62, 460, 124, 62); c.fillStyle = accent; c.fill(); write(cta, 0, 4, { size: 58, color: dark }); c.restore(); }
+  flash(t, imp, 0.5); filmLook(t, 0.45);
+}
+
+// =====================================================================
+// التشغيل والتنزيل (لا تغيرها)
+// =====================================================================
+const DUR = CONFIG.seconds;
+let start = performance.now(), recording = null;
+function frame(now) {
+  const t = Math.min(DUR, (now - start) / 1000);
+  c.setTransform(1, 0, 0, 1, 0, 0); c.globalAlpha = 1; c.clearRect(0, 0, W, H); draw(t);
+  if (t >= DUR) { if (recording) { recording.stop(); recording = null; } else if (now - start > (DUR + 0.8) * 1000) start = now; }
+  requestAnimationFrame(frame);
+}
+document.getElementById('replay').onclick = () => { start = performance.now(); };
+document.getElementById('rec').onclick = () => {
+  const msg = document.getElementById('msg');
+  if (!window.MediaRecorder || !cv.captureStream) { msg.textContent = 'المتصفح ما يدعم التنزيل. افتح الملف بكروم.'; return; }
+  const type = ['video/mp4;codecs=avc1', 'video/mp4', 'video/webm;codecs=vp9', 'video/webm'].find(m => MediaRecorder.isTypeSupported(m));
+  const rec = new MediaRecorder(cv.captureStream(30), { mimeType: type, videoBitsPerSecond: 12e6 }), parts = [];
+  rec.ondataavailable = e => e.data.size && parts.push(e.data);
+  rec.onstop = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(parts, { type }));
+    a.download = CONFIG.fileName + (type.includes('mp4') ? '.mp4' : '.webm'); a.click(); msg.textContent = 'تم التنزيل'; };
+  msg.textContent = 'جاري التسجيل…'; rec.start(); recording = rec; start = performance.now();
+};
+Promise.all([CONFIG.fonts.map(f => document.fonts.load(f))].flat()).finally(() => requestAnimationFrame(frame));
+</script>
+</body></html>
