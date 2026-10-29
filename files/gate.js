@@ -70,12 +70,11 @@
   // الشاشة الأولى: الإيميل
   function showForm(note) {
     d.innerHTML = '<form class="box" novalidate>' + logoHtml +
-      '<h2>افتح مكتبة فريقي</h2><p>حط إيميلك، ونرسل لك رابط المكتبة عليه ببلاش.</p>' +
+      '<h2>افتح مكتبة فريقي</h2><p>اكتب ايميلك لكي نرسلك رابط المكتبه</p>' +
       '<label for="fq-email">الإيميل</label>' +
       '<input id="fq-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="name@gmail.com" dir="ltr" required>' +
       '<input name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">' +
-      '<div class="err" aria-live="polite"></div><button type="submit">أرسل لي الرابط</button>' +
-      '<small>معلوماتك عندنا بس، وما نعطيها لأحد.</small></form>';
+      '<div class="err" aria-live="polite"></div><button type="submit">أرسل لي الرابط</button></form>';
     var f = d.querySelector('form'), err = d.querySelector('.err'), btn = f.querySelector('button');
     if (lastEmail) f.email.value = lastEmail;
     if (note) err.textContent = note;
