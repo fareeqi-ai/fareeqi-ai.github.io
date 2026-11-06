@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>فريقي | فيديوهات مرسومة لمشروعك</title>
+<meta name="description" content="فيديوهات مرسومة ومتحركة تحكي قصة مشروعك، والإعلان بحسابات فريقي. أكثر من 3,5 مليون مشاهدة بأقل من أسبوع.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="فريقي | فيديوهات مرسومة لمشروعك">
+<meta property="og:description" content="فيديوهات مرسومة ومتحركة تحكي قصة مشروعك، والإعلان بحسابات فريقي.">
+<meta property="og:url" content="https://fareeqi-ai.github.io/order/">
+<meta property="og:image" content="https://fareeqi-ai.github.io/order/img/logo.png">
+<meta name="theme-color" content="#f3eee3">
+<link rel="icon" href="img/logo.png">
+<link rel="apple-touch-icon" href="img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#f3eee3;--paper-2:#ebe4d5;--ink:#1c1a17;--ink-soft:#5b554b;--line:#cfc5b1;--seal:#9b3b2a}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;line-height:1.7;min-height:100vh;
+    background-image:radial-gradient(rgba(60,45,20,.05) 1px,transparent 1px),radial-gradient(rgba(60,45,20,.035) 1px,transparent 1px);
+    background-size:7px 7px,13px 13px;background-position:0 0,3px 5px}
+  .wrap{max-width:460px;margin:0 auto;padding:44px 20px 40px}
+  header{text-align:center;margin-bottom:26px}
+  .mark{width:128px;height:128px;margin:0 auto 18px;display:block;border-radius:28px;box-shadow:3px 3px 0 var(--ink);border:1.5px solid var(--ink)}
+  h1{font-family:"Amiri",serif;font-size:44px;line-height:1.5}
+  .handle{font-size:13px;color:var(--ink-soft);direction:ltr;margin-top:6px;line-height:1.4}
+  .tag{font-size:15px;color:var(--ink-soft);margin-top:14px;line-height:1.6}
+  .scribble{display:block;width:120px;height:14px;margin:14px auto 0}
+  .label{font-size:13px;font-weight:600;color:var(--ink-soft);margin:30px 4px 10px;display:flex;align-items:center;gap:10px}
+  .label::after{content:"";flex:1;height:1px;background:var(--line)}
+  .card{background:#fbf8f1;border:1.5px solid var(--ink);border-radius:4px;padding:20px 18px 18px;margin-bottom:14px;box-shadow:3px 3px 0 var(--ink)}
+  .card h2{font-size:18px;font-weight:600;line-height:1.4}
+  .card p{font-size:14.5px;color:var(--ink-soft);margin-top:6px}
+  .price{display:flex;align-items:baseline;gap:6px;margin-top:12px;font-family:"Amiri",serif;font-size:26px;line-height:1}
+  .price small{font-family:"IBM Plex Sans Arabic",sans-serif;font-size:13px;color:var(--ink-soft)}
+  ul.inc{list-style:none;margin-top:12px;display:grid;gap:4px}
+  ul.inc li{font-size:14px;padding-right:16px;position:relative}
+  ul.inc li::before{content:"";position:absolute;right:0;top:.72em;width:7px;height:7px;border:1.5px solid var(--ink);border-radius:50%}
+  .note{font-size:13px;color:var(--ink-soft);margin-top:10px}
+  .prices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+  .tier{border:1.5px solid var(--line);border-radius:3px;padding:12px 12px 10px;background:var(--paper)}
+  .tier.best{border-color:var(--ink)}
+  .tier .price{margin-top:0}
+  .tier span{display:block;font-size:12.5px;color:var(--ink-soft);margin-top:6px;line-height:1.5}
+  .styles{margin-top:12px;padding:10px 12px;border:1.5px dashed var(--ink);border-radius:3px;font-size:14px;background:var(--paper)}
+  .pay{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);font-size:13.5px;font-weight:500}
+
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .stat{background:#fbf8f1;border:1.5px solid var(--ink);border-radius:4px;padding:14px 12px;text-align:center;box-shadow:3px 3px 0 var(--ink)}
+  .stat b{display:block;font-family:"Amiri",serif;font-size:30px;line-height:1.1}
+  .stat span{display:block;font-size:12.5px;color:var(--ink-soft);margin-top:6px;line-height:1.5}
+  .vids{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  .vid{position:relative;display:block;border:1.5px solid var(--ink);border-radius:4px;overflow:hidden;box-shadow:3px 3px 0 var(--ink);background:#ece8e0;aspect-ratio:356/429}
+  .vid img{display:block;width:100%;height:100%;object-fit:cover}
+  .views{position:absolute;bottom:8px;right:8px;display:flex;align-items:center;gap:5px;background:var(--ink);color:var(--paper);font-size:13px;font-weight:600;padding:3px 9px 3px 8px;border-radius:20px;line-height:1.6}
+  .views svg{width:14px;height:14px;flex:none}
+  .src{font-size:12px;color:var(--ink-soft);margin:8px 4px 0}
+
+  .choice{display:grid;gap:8px}
+  .choice label{display:flex;align-items:center;gap:10px;margin:0;font-weight:400;font-size:14.5px;padding:10px 12px;border:1.5px solid var(--ink);border-radius:3px;background:#fbf8f1;cursor:pointer}
+  .field .choice input{accent-color:#1c1a17;width:16px;height:16px;flex:none;padding:0;margin:0}
+  .btn{display:block;width:100%;text-align:center;margin-top:16px;padding:13px 16px;font:600 15px "IBM Plex Sans Arabic",sans-serif;color:var(--paper);background:var(--ink);border:0;border-radius:3px;cursor:pointer;text-decoration:none}
+  .btn:active{transform:translateY(1px)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+  .btn.small{margin-top:10px;padding:10px 14px;font-size:14px}
+  .links{display:grid;gap:10px}
+  .link{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border:1.5px solid var(--ink);border-radius:3px;color:var(--ink);text-decoration:none;font-weight:500;font-size:15px;background:#fbf8f1}
+  .link span.h{direction:ltr;font-size:13px;color:var(--ink-soft);font-weight:400}
+  footer{text-align:center;font-size:13px;color:var(--ink-soft);margin-top:34px}
+  footer .mail{direction:ltr;display:inline-block;color:var(--ink);font-weight:500;user-select:all}
+
+  .sheet-bg{position:fixed;inset:0;background:rgba(28,26,23,.45);display:none;align-items:flex-end;justify-content:center;z-index:10}
+  .sheet-bg.open{display:flex}
+  .sheet{background:var(--paper);width:100%;max-width:460px;border-top:1.5px solid var(--ink);border-radius:10px 10px 0 0;padding:22px 20px 26px;max-height:92vh;overflow:auto}
+  .sheet h3{font-size:18px;font-weight:600}
+  .sheet .sub{font-size:13.5px;color:var(--ink-soft);margin-top:2px}
+  .field{margin-top:14px}
+  .field label{display:block;font-size:13.5px;font-weight:500;margin-bottom:5px}
+  .field input,.field textarea{width:100%;padding:11px 12px;font:15px "IBM Plex Sans Arabic",sans-serif;border:1.5px solid var(--ink);border-radius:3px;background:#fbf8f1;color:var(--ink)}
+  .field textarea{min-height:88px;resize:vertical}
+  .field .hint{font-size:12.5px;color:var(--ink-soft);margin-top:4px}
+  .done{display:none;margin-top:14px;padding:12px 14px;font-size:14px;border:1.5px dashed var(--ink);border-radius:3px;background:#fbf8f1;white-space:pre-line}
+  .done.show{display:block}
+  .close{float:left;background:none;border:0;font-size:14px;color:var(--ink-soft);cursor:pointer;font-family:inherit;padding:4px}
+  .err{color:var(--seal);font-size:13px;margin-top:8px;display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <img class="mark" src="img/logo.png" alt="فريقي">
+    <h1>فريقي</h1>
+    <div class="handle">@fareeqi.ai</div>
+    <p class="tag">فيديوهات مرسومة ومتحركة تحكي قصة مشروعك</p>
+    <svg class="scribble" viewBox="0 0 120 14" aria-hidden="true">
+      <path d="M2 9 C18 3, 30 12, 46 7 S76 3, 92 8 S112 10, 118 5" fill="none" stroke="#1c1a17" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+  </header>
+
+  <div class="label">أرقامنا بأقل من أسبوع</div>
+  <div class="stats">
+    <div class="stat"><b>3,5 مليون</b><span>أكثر من ٣ ملايين ونص مشاهدة على انستقرام وتيك توك</span></div>
+    <div class="stat"><b>8,500</b><span>أكثر من ٨٥٠٠ متابع جديد دخل حساباتنا</span></div>
+  </div>
+  <div class="vids">
+    <a class="vid" href="https://www.instagram.com/reel/DfXHq0DBHV_/" target="_blank" rel="noopener noreferrer"><img src="img/vaseline.webp" alt="فيديو الفازلين" loading="lazy"><span class="views"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>2,5 مليون</span></a>
+    <a class="vid" href="https://www.instagram.com/reel/DfVsqujBO5u/" target="_blank" rel="noopener noreferrer"><img src="img/oud.webp" alt="فيديو العود" loading="lazy"><span class="views"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>504 ألف</span></a>
+    <a class="vid" href="https://www.instagram.com/reel/DfVtGmnBebz/" target="_blank" rel="noopener noreferrer"><img src="img/sugar.webp" alt="فيديو السكر" loading="lazy"><span class="views"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>85,7 ألف</span></a>
+    <a class="vid" href="https://www.instagram.com/reel/DfX4pV_htJV/" target="_blank" rel="noopener noreferrer"><img src="img/orange.webp" alt="فيديو عصير البرتقال" loading="lazy"><span class="views"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>84,4 ألف</span></a>
+    <a class="vid" href="https://www.instagram.com/reel/DfX7ICtBOm3/" target="_blank" rel="noopener noreferrer"><img src="img/perfume.webp" alt="فيديو العطر الفرنسي" loading="lazy"><span class="views"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>53,2 ألف</span></a>
+    <a class="vid" href="https://www.instagram.com/reel/DfYU2_uIhTA/" target="_blank" rel="noopener noreferrer"><img src="img/soap.webp" alt="فيديو الصابون" loading="lazy"><span class="views"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>40,7 ألف</span></a>
+  </div>
+  <p class="src">اضغط على أي فيديو وشوفه بالانستقرام. الأرقام من انستقرام وتيك توك بتاريخ ٦ نوفمبر ٢٠٢٦.</p>
+
+  <div class="label">خدماتنا</div>
+
+  <section class="card">
+    <h2>فيديوهات مخصصة لمشروعك</h2>
+    <p>فيديو أو عرض تقديمي لمنتجك أو خدمتك، بفكرة وسكربت مكتوبين له بالذات، عشان يطلع مميز وله طابعه اللي يعرفونك فيه.</p>
+    <div class="styles">عندنا ستايلات رسم مختلفة، ونوريك أمثلة منها قبل لا تعتمد أي شي.</div>
+    <div class="prices">
+      <div class="tier">
+        <div class="price">١١٠ <small>دولار</small></div>
+        <span>فيديو واحد</span>
+      </div>
+      <div class="tier best">
+        <div class="price">٨٥ <small>دولار للفيديو</small></div>
+        <span>إذا طلبت فيديوين أو أكثر</span>
+      </div>
+    </div>
+    <ul class="inc">
+      <li>فكرة وسكربت لمنتجك أو خدمتك</li>
+      <li>التعليق الصوتي</li>
+      <li>التسليم خلال ٢ إلى ٤ أيام تقريباً</li>
+      <li>تعديل واحد مجاني</li>
+      <li>نسلمك الملف جاهز تنشره بحسابك</li>
+    </ul>
+    <p class="pay">الدفع عن طريق PayPal</p>
+    <button class="btn" data-video data-service="فيديوهات مخصصة لمشروعي">اطلب الحين</button>
+  </section>
+
+  <section class="card">
+    <h2>إعلانك بحساباتنا</h2>
+    <p>نعلن عن منتجك أو خدمتك بحساباتنا بالتيك توك والانستقرام واليوتيوب، بفيديو بأسلوبنا قدام جمهورنا.</p>
+    <p class="note">السعر حسب نوع الإعلان، ونرد عليك بالتفاصيل.</p>
+    <button class="btn ghost" data-service="إعلان بحسابات فريقي">اسأل عن الإعلان</button>
+  </section>
+
+  <div class="label">شوف شغلنا</div>
+  <div class="links">
+    <a class="link" href="https://www.instagram.com/fareeqi.ai/" target="_blank" rel="noopener noreferrer">انستقرام <span class="h">@fareeqi.ai</span></a>
+    <a class="link" href="https://www.tiktok.com/@fareeqi.ai" target="_blank" rel="noopener noreferrer">تيك توك <span class="h">@fareeqi.ai</span></a>
+    <a class="link" href="https://www.youtube.com/@fareeqi_ai" target="_blank" rel="noopener noreferrer">يوتيوب <span class="h">@fareeqi_ai</span></a>
+  </div>
+
+  <footer>
+    للتواصل بالإيميل أو على الخاص بحساباتنا<br>
+    <span class="mail">fareeqi.ai@gmail.com</span>
+  </footer>
+</div>
+
+<div class="sheet-bg" id="sheetBg" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="sheet">
+    <button class="close" id="closeBtn" type="button">إغلاق</button>
+    <h3 id="sheetTitle">طلب جديد</h3>
+    <p class="sub" id="sheetSub"></p>
+    <form id="reqForm" novalidate>
+      <div class="field">
+        <label for="fName">اسم المشروع أو البراند</label>
+        <input id="fName" maxlength="120" autocomplete="organization">
+      </div>
+      <div class="field">
+        <label for="fContact">رقم الواتساب أو الإيميل</label>
+        <input id="fContact" maxlength="120" dir="ltr" autocomplete="off">
+        <div class="hint">عشان نرد عليك</div>
+      </div>
+      <div class="field">
+        <label for="fIg">حساب الانستقرام</label>
+        <input id="fIg" maxlength="80" dir="ltr" placeholder="@" autocomplete="off">
+        <div class="hint">اختياري</div>
+      </div>
+      <div class="video-only">
+        <div class="field">
+          <label>شنو تبي؟</label>
+          <div class="choice">
+            <label><input type="radio" name="kind" value="فيديو لحساباتي" checked> فيديو لحساباتي</label>
+            <label><input type="radio" name="kind" value="عرض تقديمي"> عرض تقديمي</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>كم فيديو؟</label>
+          <div class="choice">
+            <label><input type="radio" name="qty" value="فيديو واحد (١١٠ دولار)" checked> فيديو واحد، ١١٠ دولار</label>
+            <label><input type="radio" name="qty" value="فيديوين أو أكثر (٨٥ دولار للفيديو)"> فيديوين أو أكثر، ٨٥ دولار للفيديو</label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="fProduct">منتج تبينا نركز عليه</label>
+          <input id="fProduct" maxlength="120" autocomplete="off">
+          <div class="hint">اختياري</div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="fIdea">فكرتك أو أي تفاصيل ثانية</label>
+        <textarea id="fIdea" maxlength="1500"></textarea>
+        <div class="hint">إذا ما عندك فكرة معينة اتركها فاضية، ونقترح عليك. والستايل نوريك أمثلته قبل لا تعتمد.</div>
+      </div>
+      <p class="err" id="err">اكتب اسم المشروع ورقمك أو إيميلك عشان نقدر نرد عليك.</p>
+      <button class="btn" type="submit" id="sendMail">أرسل الطلب بالإيميل</button>
+      <button class="btn ghost small" type="button" id="sendIg">أو أرسله بالانستقرام</button>
+      <div class="done" id="doneBox"></div>
+    </form>
+  </div>
+</div>
+
+<script>
+  var MAIL = "fareeqi.ai@gmail.com";
+  var IG_DM = "https://ig.me/m/fareeqi.ai";
+  var current = "";
+  var bg = document.getElementById("sheetBg");
+  var sub = document.getElementById("sheetSub");
+  var done = document.getElementById("doneBox");
+  var err = document.getElementById("err");
+
+  document.querySelectorAll("[data-service]").forEach(function(b){
+    b.addEventListener("click", function(){
+      current = b.getAttribute("data-service");
+      sub.textContent = current;
+      document.querySelector(".video-only").style.display = b.hasAttribute("data-video") ? "block" : "none";
+      done.className = "done"; done.textContent = ""; err.style.display = "none";
+      bg.classList.add("open");
+      setTimeout(function(){ document.getElementById("fName").focus(); }, 50);
+    });
+  });
+  document.getElementById("closeBtn").addEventListener("click", function(){ bg.classList.remove("open"); });
+  bg.addEventListener("click", function(e){ if(e.target === bg) bg.classList.remove("open"); });
+
+  function val(id){ return document.getElementById(id).value.trim(); }
+  function build(){
+    var name = val("fName"), contact = val("fContact"), ig = val("fIg"), idea = val("fIdea");
+    if(!name || !contact){ err.style.display = "block"; return null; }
+    err.style.display = "none";
+    var extra = "";
+    if (document.querySelector(".video-only").style.display !== "none") {
+      var kind = document.querySelector("input[name=kind]:checked");
+      var qty = document.querySelector("input[name=qty]:checked");
+      var product = val("fProduct");
+      extra = "\nالنوع: " + (kind ? kind.value : "") + "\nالعدد: " + (qty ? qty.value : "") + (product ? "\nالمنتج اللي نركز عليه: " + product : "");
+    }
+    return "السلام عليكم، أبي: " + current + "\nاسم المشروع: " + name + "\nللتواصل: " + contact + (ig ? "\nالانستقرام: " + ig : "") + extra + "\nالتفاصيل: " + (idea || "ما عندي فكرة معينة، اقترحوا علي");
+  }
+  function go(href, newTab){ var a = document.createElement("a"); a.href = href; if(newTab){ a.target = "_blank"; a.rel = "noopener noreferrer"; } document.body.appendChild(a); a.click(); a.remove(); }
+  function copy(msg, okText){
+    var show = function(ok){ done.className = "done show"; done.textContent = ok ? okText : "إذا ما انفتح البرنامج، انسخ الطلب من هني وأرسله على " + MAIL + "\n\n" + msg; };
+    try { navigator.clipboard.writeText(msg).then(function(){ show(true); }, function(){ show(false); }); } catch(e){ show(false); }
+  }
+
+  document.getElementById("reqForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var msg = build(); if(!msg) return;
+    copy(msg, "انفتح الإيميل والطلب مكتوب فيه، بس اضغط إرسال.\nوإذا ما انفتح، الطلب انتسخ، الصقه برسالة على " + MAIL);
+    go("mailto:" + MAIL + "?subject=" + encodeURIComponent("طلب جديد: " + current) + "&body=" + encodeURIComponent(msg), false);
+  });
+  document.getElementById("sendIg").addEventListener("click", function(){
+    var msg = build(); if(!msg) return;
+    copy(msg, "انتسخ الطلب. الصقه برسالة لنا بالانستقرام.");
+    go(IG_DM, true);
+  });
+</script>
+</body>
+</html>
