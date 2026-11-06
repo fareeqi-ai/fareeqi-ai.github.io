@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src https://docs.google.com; form-action 'none'; base-uri 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>فريقي | فيديوهات مرسومة لمشروعك</title>
 <meta name="description" content="فيديوهات مرسومة ومتحركة تحكي قصة مشروعك، والإعلان بحسابات فريقي. أكثر من 3,5 مليون مشاهدة بأقل من أسبوع.">
@@ -266,7 +266,6 @@
       </div>
       <p class="err" id="err"></p>
       <button class="btn" type="submit" id="sendBtn">أرسل الطلب</button>
-      <div class="done" id="doneBox" style="display:none;white-space:pre-line;user-select:text"></div>
       <p class="privacy">بياناتك نستخدمها بس للرد على طلبك، وللإيميلات إذا اخترتها، وما نشاركها مع أحد.</p>
     </form>
   </div>
@@ -351,8 +350,21 @@
     }
     lines.push("التفاصيل: " + (idea || "ما عندي فكرة معينة، اقترحوا علي"));
     lines.push("يبي إيميلات تسويقية: " + (optin ? "نعم" : "لا"));
+    window.__data = {
+      "الخدمة": current, "اسم المشروع": name, "الانستقرام": "@" + ig, "الموقع": web, "البلد": ctry,
+      "الإيميل": email, "الواتساب": phone ? cc + " " + phone : "",
+      "النوع": "", "عدد الفيديوهات": "", "المجموع بالدولار": "", "المنتج": "",
+      "التفاصيل": idea, "إيميلات تسويقية": optin ? "نعم" : "لا"
+    };
+    if (document.querySelector(".video-only").style.display !== "none") {
+      var k2 = document.querySelector("input[name=kind]:checked"), each2 = qty >= 2 ? 85 : 110;
+      window.__data["النوع"] = k2 ? k2.value : ""; window.__data["عدد الفيديوهات"] = String(qty);
+      window.__data["المجموع بالدولار"] = String(qty * each2); window.__data["المنتج"] = val("fProduct");
+    }
     return lines.join("\n");
   }
+  var FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSek3O5vADPzWm49HI0Kg4pSeSkh6yYaXszwwje8YUhQ9V6GAg/formResponse";
+  var ENTRY = {"الخدمة": "entry.1413914766", "اسم المشروع": "entry.224995700", "الانستقرام": "entry.1071135038", "الموقع": "entry.1663548291", "البلد": "entry.1795812997", "الإيميل": "entry.1940281617", "الواتساب": "entry.347967561", "النوع": "entry.53503045", "عدد الفيديوهات": "entry.672469385", "المجموع بالدولار": "entry.882336093", "المنتج": "entry.1370928239", "التفاصيل": "entry.2112084858", "إيميلات تسويقية": "entry.2077235178"};
   var form = document.getElementById("reqForm"), sendBtn = document.getElementById("sendBtn");
   var THANKS = "https://fareeqi-ai.github.io/order/thanks.html";
   form.addEventListener("submit", function(e){
@@ -362,11 +374,14 @@
     var subject = "طلب جديد: " + current + " - " + val("fName");
     document.getElementById("hSubject").value = subject;
     document.getElementById("hBody").value = msg;
-    var mailto = "mailto:fareeqi.ai@gmail.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(msg);
-    var a = document.createElement("a"); a.href = mailto; document.body.appendChild(a); a.click(); a.remove();
-    var box = document.getElementById("doneBox");
-    box.textContent = "انفتح عندك الإيميل والطلب مكتوب فيه، بس اضغط إرسال ويوصلنا.\nوإذا ما انفتح، انسخ الطلب من هني وأرسله على fareeqi.ai@gmail.com أو على الخاص بانستقرام @fareeqi.ai\n\n" + msg;
-    box.style.display = "block";
+    var data = window.__data, fd = new FormData();
+    Object.keys(ENTRY).forEach(function(k){ fd.append(ENTRY[k], data[k] || ""); });
+    sendBtn.disabled = true; sendBtn.textContent = "جاري الإرسال...";
+    var finished = false;
+    var ok = function(){ if(finished) return; finished = true; location.href = "thanks.html"; };
+    var fail = function(){ if(finished) return; finished = true; sendBtn.disabled = false; sendBtn.textContent = "أرسل الطلب"; err.textContent = "صار خلل بالاتصال، تأكد من الإنترنت وجرب مرة ثانية."; err.style.display = "block"; };
+    var timer = setTimeout(fail, 20000);
+    fetch(FORM_URL, { method: "POST", mode: "no-cors", body: fd }).then(function(){ clearTimeout(timer); ok(); }, function(){ clearTimeout(timer); fail(); });
   });
 </script>
 </body>
