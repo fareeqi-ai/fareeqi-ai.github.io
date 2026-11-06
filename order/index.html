@@ -304,9 +304,15 @@
   document.getElementById("qMinus").addEventListener("click", function(){ if(qty > 1){ qty--; renderQty(); } });
   renderQty();
   var country = document.getElementById("fCountry"), countryOther = document.getElementById("fCountryOther");
-  country.addEventListener("change", function(){ countryOther.style.display = country.value === "other" ? "block" : "none"; });
+
   var code = document.getElementById("fCode"), codeOther = document.getElementById("fCodeOther");
   code.addEventListener("change", function(){ codeOther.style.display = code.value === "other" ? "block" : "none"; });
+  var CODES = {"الكويت":"+965","السعودية":"+966","الإمارات":"+971","قطر":"+974","البحرين":"+973","عمان":"+968","العراق":"+964","الأردن":"+962"};
+  country.addEventListener("change", function(){
+    countryOther.style.display = country.value === "other" ? "block" : "none";
+    if (CODES[country.value]) { code.value = CODES[country.value]; codeOther.style.display = "none"; }
+    else if (country.value === "other") { code.value = "other"; codeOther.style.display = "block"; }
+  });
   function mark(id, bad){ document.getElementById(id).classList.toggle("bad", bad); }
   function build(){
     var name = val("fName"), ig = val("fIg").replace(/^@+/, ""), web = val("fWeb"), idea = val("fIdea");
