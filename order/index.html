@@ -88,7 +88,22 @@
   .done{display:none;margin-top:14px;padding:12px 14px;font-size:14px;border:1.5px dashed var(--ink);border-radius:3px;background:#fbf8f1;white-space:pre-line}
   .done.show{display:block}
   .close{float:left;background:none;border:0;font-size:14px;color:var(--ink-soft);cursor:pointer;font-family:inherit;padding:4px}
-  .err{color:var(--seal);font-size:13px;margin-top:8px;display:none}
+  .err{color:var(--seal);font-size:13px;margin-top:10px;display:none;white-space:pre-line}
+  .star{color:var(--seal)}
+  .req-note{font-size:12.5px;color:var(--ink-soft);margin-top:6px}
+  .field select{width:100%;padding:11px 12px;font:15px "IBM Plex Sans Arabic",sans-serif;border:1.5px solid var(--ink);border-radius:3px;background:#fbf8f1;color:var(--ink)}
+  .mt{margin-top:8px}
+  .hint.top{margin:0 0 6px}
+  .phone{display:flex;gap:8px;direction:ltr}
+  .phone select{width:auto;flex:none}
+  .phone #fCodeOther{width:80px;flex:none}
+  .phone #fPhone{flex:1;min-width:0}
+  .bad{border-color:var(--seal)!important;background:#fbefe9!important}
+  .qty{display:flex;align-items:center;gap:0;border:1.5px solid var(--ink);border-radius:3px;width:max-content;background:#fbf8f1}
+  .qbtn{width:46px;height:44px;border:0;background:transparent;font:600 22px "IBM Plex Sans Arabic",sans-serif;color:var(--ink);cursor:pointer}
+  .qbtn:disabled{opacity:.3;cursor:default}
+  .qty output{min-width:52px;text-align:center;font:600 18px "IBM Plex Sans Arabic",sans-serif;border-inline:1.5px solid var(--ink);line-height:44px}
+  .total{font-size:13.5px;margin-top:8px;font-weight:500}
 </style>
 </head>
 <body>
@@ -172,19 +187,39 @@
     <h3 id="sheetTitle">طلب جديد</h3>
     <p class="sub" id="sheetSub"></p>
     <form id="reqForm" novalidate>
+      <p class="req-note">الخانات اللي عليها <span class="star">*</span> لازم تنعبى.</p>
       <div class="field">
-        <label for="fName">اسم المشروع أو البراند</label>
+        <label for="fName">اسم المشروع أو البراند <span class="star">*</span></label>
         <input id="fName" maxlength="120" autocomplete="organization">
       </div>
       <div class="field">
-        <label for="fContact">رقم الواتساب أو الإيميل</label>
-        <input id="fContact" maxlength="120" dir="ltr" autocomplete="off">
-        <div class="hint">عشان نرد عليك</div>
+        <label for="fIg">حساب الانستقرام <span class="star">*</span></label>
+        <input id="fIg" maxlength="80" dir="ltr" placeholder="@" autocomplete="off">
       </div>
       <div class="field">
-        <label for="fIg">حساب الانستقرام</label>
-        <input id="fIg" maxlength="80" dir="ltr" placeholder="@" autocomplete="off">
-        <div class="hint">اختياري</div>
+        <label for="fWeb">الموقع الإلكتروني للمشروع <span class="star">*</span></label>
+        <input id="fWeb" maxlength="200" dir="ltr" placeholder="www.example.com" autocomplete="url" inputmode="url">
+      </div>
+      <div class="field">
+        <label for="fCountry">البلد <span class="star">*</span></label>
+        <select id="fCountry">
+          <option value="">اختر البلد</option>
+          <option>الكويت</option><option>السعودية</option><option>الإمارات</option><option>قطر</option><option>البحرين</option><option>عمان</option>
+          <option value="other">دولة ثانية</option>
+        </select>
+        <input id="fCountryOther" class="mt" maxlength="60" placeholder="اكتب اسم البلد" style="display:none">
+      </div>
+      <div class="field">
+        <label>للتواصل <span class="star">*</span></label>
+        <div class="hint top">اكتب الإيميل أو رقم الواتساب، أو الاثنين.</div>
+        <input id="fEmail" maxlength="120" dir="ltr" type="email" placeholder="الإيميل" autocomplete="email">
+        <div class="phone mt">
+          <select id="fCode" dir="ltr" aria-label="رمز الدولة">
+            <option value="+965">+965</option><option value="+966">+966</option><option value="+971">+971</option><option value="+974">+974</option><option value="+973">+973</option><option value="+968">+968</option><option value="other">رمز ثاني</option>
+          </select>
+          <input id="fCodeOther" dir="ltr" maxlength="5" placeholder="+" style="display:none">
+          <input id="fPhone" dir="ltr" maxlength="15" inputmode="numeric" placeholder="رقم الواتساب" autocomplete="tel-national">
+        </div>
       </div>
       <div class="video-only">
         <div class="field">
@@ -196,10 +231,12 @@
         </div>
         <div class="field">
           <label>كم فيديو؟</label>
-          <div class="choice">
-            <label><input type="radio" name="qty" value="فيديو واحد (١١٠ دولار)" checked> فيديو واحد، ١١٠ دولار</label>
-            <label><input type="radio" name="qty" value="فيديوين أو أكثر (٨٥ دولار للفيديو)"> فيديوين أو أكثر، ٨٥ دولار للفيديو</label>
+          <div class="qty">
+            <button type="button" class="qbtn" id="qPlus" aria-label="زيادة">+</button>
+            <output id="qVal">1</output>
+            <button type="button" class="qbtn" id="qMinus" aria-label="نقص">−</button>
           </div>
+          <div class="total" id="qTotal"></div>
         </div>
         <div class="field">
           <label for="fProduct">منتج تبينا نركز عليه</label>
@@ -209,10 +246,10 @@
       </div>
       <div class="field">
         <label for="fIdea">فكرتك أو أي تفاصيل ثانية</label>
-        <textarea id="fIdea" maxlength="1500"></textarea>
-        <div class="hint">إذا ما عندك فكرة معينة اتركها فاضية، ونقترح عليك. والستايل نوريك أمثلته قبل لا تعتمد.</div>
+        <textarea id="fIdea" maxlength="1000"></textarea>
+        <div class="hint">اختياري. إذا ما عندك فكرة معينة اتركها فاضية، ونقترح عليك. والستايل نوريك أمثلته قبل لا تعتمد.</div>
       </div>
-      <p class="err" id="err">اكتب اسم المشروع ورقمك أو إيميلك عشان نقدر نرد عليك.</p>
+      <p class="err" id="err"></p>
       <button class="btn" type="submit" id="sendMail">أرسل الطلب بالإيميل</button>
       <button class="btn ghost small" type="button" id="sendIg">أو أرسله بالانستقرام</button>
       <div class="done" id="doneBox"></div>
@@ -243,18 +280,54 @@
   bg.addEventListener("click", function(e){ if(e.target === bg) bg.classList.remove("open"); });
 
   function val(id){ return document.getElementById(id).value.trim(); }
+  var qty = 1;
+  function money(n){ return n.toLocaleString("en-US"); }
+  function renderQty(){
+    document.getElementById("qVal").textContent = qty;
+    document.getElementById("qMinus").disabled = qty <= 1;
+    var each = qty >= 2 ? 85 : 110;
+    document.getElementById("qTotal").textContent = qty === 1 ? "المجموع: 110 دولار" : "المجموع: " + money(qty * each) + " دولار، " + each + " دولار للفيديو";
+  }
+  document.getElementById("qPlus").addEventListener("click", function(){ if(qty < 50){ qty++; renderQty(); } });
+  document.getElementById("qMinus").addEventListener("click", function(){ if(qty > 1){ qty--; renderQty(); } });
+  renderQty();
+  var country = document.getElementById("fCountry"), countryOther = document.getElementById("fCountryOther");
+  country.addEventListener("change", function(){ countryOther.style.display = country.value === "other" ? "block" : "none"; });
+  var code = document.getElementById("fCode"), codeOther = document.getElementById("fCodeOther");
+  code.addEventListener("change", function(){ codeOther.style.display = code.value === "other" ? "block" : "none"; });
+  function mark(id, bad){ document.getElementById(id).classList.toggle("bad", bad); }
   function build(){
-    var name = val("fName"), contact = val("fContact"), ig = val("fIg"), idea = val("fIdea");
-    if(!name || !contact){ err.style.display = "block"; return null; }
+    var name = val("fName"), ig = val("fIg").replace(/^@+/, ""), web = val("fWeb"), idea = val("fIdea");
+    var ctry = country.value === "other" ? val("fCountryOther") : country.value;
+    var email = val("fEmail"), phone = val("fPhone").replace(/[^0-9]/g, "");
+    var cc = code.value === "other" ? val("fCodeOther").replace(/[^0-9+]/g, "") : code.value;
+    if(cc && cc.charAt(0) !== "+") cc = "+" + cc;
+    var problems = [];
+    mark("fName", !name); if(!name) problems.push("اسم المشروع");
+    var igOk = /^[A-Za-z0-9._]{1,30}$/.test(ig); mark("fIg", !igOk); if(!igOk) problems.push("حساب الانستقرام");
+    var webOk = /^(https?:\/\/)?[^\s.\/]+(\.[^\s.\/]+)+(\/\S*)?$/i.test(web); mark("fWeb", !webOk); if(!webOk) problems.push("الموقع الإلكتروني");
+    mark("fCountry", !country.value); mark("fCountryOther", country.value === "other" && !ctry); if(!ctry) problems.push("البلد");
+    var emailOk = email === "" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    var phoneOk = phone === "" || (phone.length >= 7 && /^\+[0-9]{1,4}$/.test(cc));
+    var hasContact = (email !== "" && emailOk) || (phone !== "" && phoneOk);
+    mark("fEmail", !emailOk || (!hasContact && phone === "")); mark("fPhone", !phoneOk || (!hasContact && email === ""));
+    if(!emailOk) problems.push("الإيميل مكتوب غلط");
+    if(!phoneOk) problems.push("رقم الواتساب أو رمز الدولة غلط");
+    if(!hasContact && emailOk && phoneOk) problems.push("الإيميل أو رقم الواتساب");
+    if(problems.length){ err.textContent = "لازم تعبي أو تعدل: " + problems.join("، "); err.style.display = "block"; return null; }
     err.style.display = "none";
-    var extra = "";
+    var lines = ["السلام عليكم، عندي طلب جديد", "", "الخدمة: " + current, "اسم المشروع: " + name, "الانستقرام: @" + ig, "الموقع: " + web, "البلد: " + ctry];
+    if(email) lines.push("الإيميل: " + email);
+    if(phone) lines.push("الواتساب: " + cc + " " + phone);
     if (document.querySelector(".video-only").style.display !== "none") {
-      var kind = document.querySelector("input[name=kind]:checked");
-      var qty = document.querySelector("input[name=qty]:checked");
-      var product = val("fProduct");
-      extra = "\nالنوع: " + (kind ? kind.value : "") + "\nالعدد: " + (qty ? qty.value : "") + (product ? "\nالمنتج اللي نركز عليه: " + product : "");
+      var kind = document.querySelector("input[name=kind]:checked"), product = val("fProduct");
+      var each = qty >= 2 ? 85 : 110;
+      lines.push("النوع: " + (kind ? kind.value : ""));
+      lines.push("عدد الفيديوهات: " + qty + "، المجموع " + money(qty * each) + " دولار");
+      if(product) lines.push("المنتج اللي نركز عليه: " + product);
     }
-    return "السلام عليكم، أبي: " + current + "\nاسم المشروع: " + name + "\nللتواصل: " + contact + (ig ? "\nالانستقرام: " + ig : "") + extra + "\nالتفاصيل: " + (idea || "ما عندي فكرة معينة، اقترحوا علي");
+    lines.push("التفاصيل: " + (idea || "ما عندي فكرة معينة، اقترحوا علي"));
+    return lines.join("\n");
   }
   function go(href, newTab){ var a = document.createElement("a"); a.href = href; if(newTab){ a.target = "_blank"; a.rel = "noopener noreferrer"; } document.body.appendChild(a); a.click(); a.remove(); }
   function copy(msg, okText){
@@ -266,7 +339,7 @@
     e.preventDefault();
     var msg = build(); if(!msg) return;
     copy(msg, "انفتح الإيميل والطلب مكتوب فيه، بس اضغط إرسال.\nوإذا ما انفتح، الطلب انتسخ، الصقه برسالة على " + MAIL);
-    go("mailto:" + MAIL + "?subject=" + encodeURIComponent("طلب جديد: " + current) + "&body=" + encodeURIComponent(msg), false);
+    go("mailto:" + MAIL + "?subject=" + encodeURIComponent("طلب جديد: " + current + " - " + val("fName")) + "&body=" + encodeURIComponent(msg), false);
   });
   document.getElementById("sendIg").addEventListener("click", function(){
     var msg = build(); if(!msg) return;
