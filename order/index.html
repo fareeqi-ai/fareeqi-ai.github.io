@@ -95,7 +95,7 @@
   .mt{margin-top:8px}
   .hint.top{margin:0 0 6px}
   .phone{display:flex;gap:8px;direction:ltr}
-  .phone select{width:auto;flex:none}
+  .phone select{width:auto;flex:none;direction:rtl}
   .phone #fCodeOther{width:80px;flex:none}
   .phone #fPhone{flex:1;min-width:0}
   .bad{border-color:var(--seal)!important;background:#fbefe9!important}
@@ -215,7 +215,7 @@
         <input id="fEmail" maxlength="120" dir="ltr" type="email" placeholder="الإيميل" autocomplete="email">
         <div class="phone mt">
           <select id="fCode" dir="ltr" aria-label="رمز الدولة">
-            <option value="+965">+965</option><option value="+966">+966</option><option value="+971">+971</option><option value="+974">+974</option><option value="+973">+973</option><option value="+968">+968</option><option value="+964">+964</option><option value="+962">+962</option><option value="other">رمز ثاني</option>
+            <option value="+965">الكويت +965</option><option value="+966">السعودية +966</option><option value="+971">الإمارات +971</option><option value="+974">قطر +974</option><option value="+973">البحرين +973</option><option value="+968">عمان +968</option><option value="+964">العراق +964</option><option value="+962">الأردن +962</option><option value="other">رمز ثاني</option>
           </select>
           <input id="fCodeOther" dir="ltr" maxlength="5" placeholder="+" style="display:none">
           <input id="fPhone" dir="ltr" maxlength="15" inputmode="numeric" placeholder="رقم الواتساب" autocomplete="tel-national">
