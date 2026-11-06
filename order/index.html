@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src https://formsubmit.co; form-action https://formsubmit.co; base-uri 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>فريقي | فيديوهات مرسومة لمشروعك</title>
 <meta name="description" content="فيديوهات مرسومة ومتحركة تحكي قصة مشروعك، والإعلان بحسابات فريقي. أكثر من 3,5 مليون مشاهدة بأقل من أسبوع.">
@@ -191,7 +191,7 @@
     <button class="close" id="closeBtn" type="button">إغلاق</button>
     <h3 id="sheetTitle">طلب جديد</h3>
     <p class="sub" id="sheetSub"></p>
-    <form id="reqForm" action="https://formsubmit.co/fareeqi.ai@gmail.com" method="POST" novalidate>
+    <form id="reqForm" novalidate>
       <input type="hidden" name="_next" value="https://fareeqi-ai.github.io/order/thanks.html">
       <input type="hidden" name="_captcha" value="false">
       <input type="hidden" name="_template" value="table">
@@ -266,6 +266,7 @@
       </div>
       <p class="err" id="err"></p>
       <button class="btn" type="submit" id="sendBtn">أرسل الطلب</button>
+      <div class="done" id="doneBox" style="display:none;white-space:pre-line;user-select:text"></div>
       <p class="privacy">بياناتك نستخدمها بس للرد على طلبك، وللإيميلات إذا اخترتها، وما نشاركها مع أحد.</p>
     </form>
   </div>
@@ -361,17 +362,11 @@
     var subject = "طلب جديد: " + current + " - " + val("fName");
     document.getElementById("hSubject").value = subject;
     document.getElementById("hBody").value = msg;
-    sendBtn.disabled = true; sendBtn.textContent = "جاري الإرسال...";
-    var fallback = function(){ form.submit(); };
-    try {
-      fetch("https://formsubmit.co/ajax/fareeqi.ai@gmail.com", {
-        method: "POST",
-        headers: {"Content-Type": "application/json", "Accept": "application/json"},
-        body: JSON.stringify(Object.assign({_subject: subject, _template: "table", _captcha: "false", "الطلب": msg}, val("fEmail") ? {_replyto: val("fEmail")} : {}))
-      }).then(function(r){ return r.ok ? r.json() : Promise.reject(); })
-        .then(function(d){ if(d && (d.success === true || d.success === "true")) location.href = THANKS; else fallback(); })
-        .catch(fallback);
-    } catch(err2){ fallback(); }
+    var mailto = "mailto:fareeqi.ai@gmail.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(msg);
+    var a = document.createElement("a"); a.href = mailto; document.body.appendChild(a); a.click(); a.remove();
+    var box = document.getElementById("doneBox");
+    box.textContent = "انفتح عندك الإيميل والطلب مكتوب فيه، بس اضغط إرسال ويوصلنا.\nوإذا ما انفتح، انسخ الطلب من هني وأرسله على fareeqi.ai@gmail.com أو على الخاص بانستقرام @fareeqi.ai\n\n" + msg;
+    box.style.display = "block";
   });
 </script>
 </body>
