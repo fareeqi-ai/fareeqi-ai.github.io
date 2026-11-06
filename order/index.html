@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src https://formsubmit.co; form-action https://formsubmit.co; base-uri 'none'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>فريقي | فيديوهات مرسومة لمشروعك</title>
 <meta name="description" content="فيديوهات مرسومة ومتحركة تحكي قصة مشروعك، والإعلان بحسابات فريقي. أكثر من 3,5 مليون مشاهدة بأقل من أسبوع.">
@@ -88,6 +88,8 @@
   .done{display:none;margin-top:14px;padding:12px 14px;font-size:14px;border:1.5px dashed var(--ink);border-radius:3px;background:#fbf8f1;white-space:pre-line}
   .done.show{display:block}
   .close{float:left;background:none;border:0;font-size:14px;color:var(--ink-soft);cursor:pointer;font-family:inherit;padding:4px}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+  .btn:disabled{opacity:.6;cursor:wait}
   .err{color:var(--seal);font-size:13px;margin-top:10px;display:none;white-space:pre-line}
   .star{color:var(--seal)}
   .req-note{font-size:12.5px;color:var(--ink-soft);margin-top:6px}
@@ -186,7 +188,13 @@
     <button class="close" id="closeBtn" type="button">إغلاق</button>
     <h3 id="sheetTitle">طلب جديد</h3>
     <p class="sub" id="sheetSub"></p>
-    <form id="reqForm" novalidate>
+    <form id="reqForm" action="https://formsubmit.co/fareeqi.ai@gmail.com" method="POST" novalidate>
+      <input type="hidden" name="_next" value="https://fareeqi-ai.github.io/order/thanks.html">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_subject" id="hSubject" value="طلب جديد من صفحة فريقي">
+      <input type="hidden" name="الطلب" id="hBody">
+      <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
       <p class="req-note">الخانات اللي عليها <span class="star">*</span> لازم تنعبى.</p>
       <div class="field">
         <label for="fName">اسم المشروع أو البراند <span class="star">*</span></label>
@@ -250,20 +258,16 @@
         <div class="hint">اختياري. إذا ما عندك فكرة معينة اتركها فاضية، ونقترح عليك. والستايل نوريك أمثلته قبل لا تعتمد.</div>
       </div>
       <p class="err" id="err"></p>
-      <button class="btn" type="submit" id="sendMail">أرسل الطلب بالإيميل</button>
-      <button class="btn ghost small" type="button" id="sendIg">أو أرسله بالانستقرام</button>
-      <div class="done" id="doneBox"></div>
+      <button class="btn" type="submit" id="sendBtn">أرسل الطلب</button>
     </form>
   </div>
 </div>
 
 <script>
   var MAIL = "fareeqi.ai@gmail.com";
-  var IG_DM = "https://ig.me/m/fareeqi.ai";
   var current = "";
   var bg = document.getElementById("sheetBg");
   var sub = document.getElementById("sheetSub");
-  var done = document.getElementById("doneBox");
   var err = document.getElementById("err");
 
   document.querySelectorAll("[data-service]").forEach(function(b){
@@ -271,7 +275,7 @@
       current = b.getAttribute("data-service");
       sub.textContent = current;
       document.querySelector(".video-only").style.display = b.hasAttribute("data-video") ? "block" : "none";
-      done.className = "done"; done.textContent = ""; err.style.display = "none";
+      err.style.display = "none";
       bg.classList.add("open");
       setTimeout(function(){ document.getElementById("fName").focus(); }, 50);
     });
@@ -329,22 +333,26 @@
     lines.push("التفاصيل: " + (idea || "ما عندي فكرة معينة، اقترحوا علي"));
     return lines.join("\n");
   }
-  function go(href, newTab){ var a = document.createElement("a"); a.href = href; if(newTab){ a.target = "_blank"; a.rel = "noopener noreferrer"; } document.body.appendChild(a); a.click(); a.remove(); }
-  function copy(msg, okText){
-    var show = function(ok){ done.className = "done show"; done.textContent = ok ? okText : "إذا ما انفتح البرنامج، انسخ الطلب من هني وأرسله على " + MAIL + "\n\n" + msg; };
-    try { navigator.clipboard.writeText(msg).then(function(){ show(true); }, function(){ show(false); }); } catch(e){ show(false); }
-  }
-
-  document.getElementById("reqForm").addEventListener("submit", function(e){
+  var form = document.getElementById("reqForm"), sendBtn = document.getElementById("sendBtn");
+  var THANKS = "https://fareeqi-ai.github.io/order/thanks.html";
+  form.addEventListener("submit", function(e){
     e.preventDefault();
     var msg = build(); if(!msg) return;
-    copy(msg, "انفتح الإيميل والطلب مكتوب فيه، بس اضغط إرسال.\nوإذا ما انفتح، الطلب انتسخ، الصقه برسالة على " + MAIL);
-    go("mailto:" + MAIL + "?subject=" + encodeURIComponent("طلب جديد: " + current + " - " + val("fName")) + "&body=" + encodeURIComponent(msg), false);
-  });
-  document.getElementById("sendIg").addEventListener("click", function(){
-    var msg = build(); if(!msg) return;
-    copy(msg, "انتسخ الطلب. الصقه برسالة لنا بالانستقرام.");
-    go(IG_DM, true);
+    if(form.elements["_honey"].value) return;
+    var subject = "طلب جديد: " + current + " - " + val("fName");
+    document.getElementById("hSubject").value = subject;
+    document.getElementById("hBody").value = msg;
+    sendBtn.disabled = true; sendBtn.textContent = "جاري الإرسال...";
+    var fallback = function(){ form.submit(); };
+    try {
+      fetch("https://formsubmit.co/ajax/fareeqi.ai@gmail.com", {
+        method: "POST",
+        headers: {"Content-Type": "application/json", "Accept": "application/json"},
+        body: JSON.stringify(Object.assign({_subject: subject, _template: "table", _captcha: "false", "الطلب": msg}, val("fEmail") ? {_replyto: val("fEmail")} : {}))
+      }).then(function(r){ return r.ok ? r.json() : Promise.reject(); })
+        .then(function(d){ if(d && (d.success === true || d.success === "true")) location.href = THANKS; else fallback(); })
+        .catch(fallback);
+    } catch(err2){ fallback(); }
   });
 </script>
 </body>
